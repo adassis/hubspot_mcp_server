@@ -85,7 +85,6 @@ def hubspot_associate(
     if r.status_code == 204 or not r.text:
         return {"success": True}
     return r.json()
-
 def hubspot_paginate_all(path: str, params: dict = None, max_items: int = 500) -> list:
     """
     Récupère toutes les pages d'un endpoint HubSpot.
