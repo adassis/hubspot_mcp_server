@@ -1,0 +1,1 @@
+# tools/__init__.py — Package Python (fichier vide obligatoire)

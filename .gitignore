@@ -1,0 +1,9 @@
+# Ne jamais commit les secrets ou l'environnement virtuel
+.env
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.DS_Store
