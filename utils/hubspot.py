@@ -59,37 +59,31 @@ def hubspot_associate(
     from_object_id: str,
     to_object_type: str,
     to_object_id: str,
-    association_type_id: int
+    association_type_id: int = None  # ignoré, conservé pour compatibilité
 ) -> dict:
     """
-    Crée une association entre deux objets CRM HubSpot.
-
-    AssociationTypeIds courants (HUBSPOT_DEFINED) :
-    - note → contact : 202
-    - note → deal    : 214
-    - note → ticket  : 216
-    - task → contact : 204
-    - task → deal    : 216
-    - task → ticket  : 278
+    Crée une association par défaut entre deux objets CRM HubSpot.
+    Utilise l'endpoint /associations/default — pas besoin de typeId.
+    
+    PUT /crm/objects/2026-03/{from}/{fromId}/associations/default/{to}/{toId}
     """
-    path = f"/crm/v4/associations/{from_object_type}/{to_object_type}/batch/create"
-    body = {
-        "inputs": [
-            {
-                "from": {"id": str(from_object_id)},
-                "to": {"id": str(to_object_id)},
-                "types": [
-                    {
-                        "associationCategory": "HUBSPOT_DEFINED",
-                        "associationTypeId": association_type_id
-                    }
-                ]
-            }
-        ]
-    }
-    r = requests.post(BASE_URL + path, headers=_headers(), json=body, timeout=30)
+    path = (
+        f"/crm/objects/2026-03/{from_object_type}/{from_object_id}"
+        f"/associations/default/{to_object_type}/{to_object_id}"
+    )
+    r = requests.put(
+        BASE_URL + path,
+        headers=_headers(),
+        timeout=30
+    )
     if not r.ok:
-        raise RuntimeError(f"ASSOCIATE {from_object_type}→{to_object_type} → HTTP {r.status_code}: {r.text[:400]}")
+        raise RuntimeError(
+            f"ASSOCIATE {from_object_type}→{to_object_type} "
+            f"→ HTTP {r.status_code}: {r.text[:400]}"
+        )
+    # PUT /associations/default retourne HTTP 200 avec un body ou HTTP 204
+    if r.status_code == 204 or not r.text:
+        return {"success": True}
     return r.json()
 
 def hubspot_paginate_all(path: str, params: dict = None, max_items: int = 500) -> list:
