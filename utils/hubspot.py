@@ -7,7 +7,7 @@
 # - Propriétés dans un objet "properties": {}
 # - Pagination via curseur "after" (paging.next.after)
 # - DELETE retourne HTTP 204 No Content (pas de JSON)
-# =============================================================
+# ===========================================================
 
 import requests
 from config import HUBSPOT_ACCESS_TOKEN
