@@ -18,6 +18,7 @@ import tools.contacts
 import tools.notes
 import tools.tasks
 import tools.owners
+import tools.emails 
 
 mcp = FastMCP(
     name="hubspot-server",
@@ -39,6 +40,7 @@ tools.contacts.register(mcp)
 tools.notes.register(mcp)
 tools.tasks.register(mcp)
 tools.owners.register(mcp)
+tools.emails.register(mcp)
 
 class BearerAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
